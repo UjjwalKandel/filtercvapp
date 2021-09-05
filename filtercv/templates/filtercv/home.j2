@@ -46,11 +46,16 @@
 
 <div class="container container2 inactive">
 
-<div class="input-group mb-3">
-  <input type="text" class="form-control" placeholder="search_tag">
-</div>
+      <div class="card mb-5 shadow border-0">
+        <div class="card-body form-group form-group-lg">
+          <p class="text-muted">
+            Add below multiple tags seperate by comma.<br>
+          </p>
+          <input id="tags" type="text" name="tags" class="form-control tagin filter_table" value="" data-placeholder="", onchange ="filterTable()">
+        </div>
+    </div>
 
-<table class="table table-striped">
+<table class="table table-striped" id="table">
   <thead>
     <tr>
       <th scope="col">CV Name</th>
@@ -62,8 +67,6 @@
 
   </tbody>
 </table>
-
-
 
 
 </div>

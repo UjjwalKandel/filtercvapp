@@ -15,6 +15,7 @@ document.getElementById('submit').onclick = (e) => {
     .then((res) => res.json())
     .then((data) => {
       updateTable(data)
+      updateTagFilter(data.words) // words is a array
     })
     .catch(console.warn);
 
@@ -35,6 +36,8 @@ const changeContainerDisplay = () => {
 
 const updateTable = (data) => {
   tbody = document.getElementById("tbody");
+
+  removeAllChildNodes(tbody);
   Object.entries(data.result).forEach(el => {
 
     let tr = document.createElement("tr");
@@ -52,8 +55,57 @@ const updateTable = (data) => {
     tr.appendChild(name);
     tr.appendChild(tags);
     tr.appendChild(cv);
-    tbody.appendChild(tr)
+    tbody.appendChild(tr);
   })
 
   changeContainerDisplay();
+}
+
+
+const removeAllChildNodes = parent => {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
+}
+
+const filterTable = () => {
+  let input, words, table, tr, td, i, txtValue;
+  input = document.getElementsByClassName("filter_table")[0]
+  words = input.value.toLowerCase().split(",")
+
+  tbody = document.getElementById("tbody")
+  tRows = tbody.getElementsByTagName("tr")
+
+
+  for (i = 0; i < tRows.length; i++) {
+    tRow = tRows[i];
+    td = tRow.getElementsByTagName("td")[1];
+    if (td) {
+      presentTag = td.innerHTML.split(',').map(item => item.trim().toLowerCase());
+      presentSearchedTag = true;
+
+      if (words.length === ['']) {
+        tRow.style.display = "";
+      } else {
+
+        words.forEach(word => {
+          if (presentTag.indexOf(word) === -1) {
+            presentSearchedTag = false;
+          }
+
+        })
+
+        if (presentSearchedTag === false) {
+          tRow.style.display = "none";
+        } else {
+          tRow.style.display = "";
+        }
+      }
+
+    }
+  }
+}
+
+const updateTagFilter = (words) => {
+  document.getElementsByClassName("filter_table")[0].value = words.toString()
 }
