@@ -6,74 +6,99 @@
 {% endblock css %}
 
 {% block content %}
-<div class="container container1 active">
- <form  id="file_upload" method="POST" enctype="multipart/form-data"> 
-        {% csrf_token %}
+    <div class="container-sm">
 
-    <!-- Tag part -->
-      <div class="card mb-5 shadow border-0">
-        <div class="card-body form-group form-group-lg">
-          <p class="text-muted">
-            Add below multiple tags seperate by comma.<br>
-          </p>
-          <input id="tags" type="text" name="tags" class="form-control tagin" value="" data-placeholder="">
-        </div>
-    </div>
+        <!-- Full Body Part -->
+        <div class="upload_blue_box">
 
-  <!-- Upload files part -->
-  <div class="upload">
-  <div class="upload-wrapper">
-    <div class="upload-wrapper-text--secondary">
-      Make your search easy 
-      <span class="upload-wrapper-text--primary">UPLOAD you CV</span>
+            <!-- Text and Upload Part -->
+            <div class="row align-items-center body_wrapper">
 
-      <div class="input-bar">
-        <div class="input-bar-item">
-             <div class="input-group">
-                <input class="form-control " id="files" type="file" name="files"  multiple data-show-upload="false" data-show-caption="true">
-                <span class="input-group-btn">
-                  <button class="btn btn-info" id="submit">Upload</button>
-                </span>
+                <!-- Text Part Only-->
+                <div class="col-md-4 align-self-center heading_text">
+                    <div class="upload_heading-text--secondary">
+                        Make your search easy
+                        <span class="upload_heading-text--primary">UPLOAD your CV</span>
+                    </div>
+                </div>
+
+                <!-- Upload part Only-->
+                <div class="col-md-8 align-self-center">
+                    <div class="box has-advanced-upload" id="dropbox">
+                        <div class="box__input">
+                            <i class="fas fa-cloud-upload-alt box__icon"></i>
+                            <input type="file" name="files[]" id="input_files" class="box__file"
+                                data-multiple-caption="{count} files selected" multiple />
+                            <label for="input_files"><strong>Choose files</strong><span class="box__dragndrop"> or
+                                    drag the files
+                                    here</span>.</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- Search input and table  -->
+            <div class="body_wrapper">
+                <div class="file_table">
+                    <div class="file_table_filter">
+                        <input type="text" class="file_table_filter_input" id="filter_table"
+                            placeholder="Search for file.." title="Search for File">
+                        <i class="fa fa-user fa-lg"></i>
+                    </div>
+                </div>
+
+                <!-- Table Part -->
+                <table class="table table-striped justify-content-center">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="col-8">File Name</th>
+                            <th scope="col" class="col-2">Size</th>
+                            <th scope="col" class="col-2">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="file_table">
+                        <tr>
+                            <td><i class="fas fa-file-pdf"></i> Mark</td>
+                            <td>Otto</td>
+                            <td><i class="far fa-trash-alt"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                        </tr>
+                        <tr>
+                            <td>Larry</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-      </div>
 
-    </div> 
-  </div>
-  </div>
-  </form>
-</div>
+        <!-- Tags Button -->
+        <div class="tag_wrapper">
+            <div class="tag__input">
+                <input type="text" placeholder="Add tags here">
+            </div>
+            <div class="tags__placed">
+                <div class="tag">
+                    <span>Javascript</span>
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+        </div>
 
-<div class="container container2 inactive">
-
-      <div class="card mb-5 shadow border-0">
-        <div class="card-body form-group form-group-lg">
-          <p class="text-muted">
-            Add below multiple tags seperate by comma.<br>
-          </p>
-          <input id="tags" type="text" name="tags" class="form-control tagin filter_table" value="" data-placeholder="", onchange ="filterTable()">
+        <!-- Action Buttons -->
+        <div class="row justify-content-between action-btns">
+            <input type="reset" is="button" class="btn btn-warning col-4 reset" value="Reset" id="reset_btn">
+            <button type="button" class="btn btn-primary col-4 submit">Submit</button>
         </div>
     </div>
-
-<table class="table table-striped" id="table">
-  <thead>
-    <tr>
-      <th scope="col">CV Name</th>
-      <th scope="col">Tags</th>
-      <th scope="col">Open CV</th>
-    </tr>
-  </thead>
-  <tbody id="tbody">
-
-  </tbody>
-</table>
-
-
-</div>
+ 
 {% endblock content%}
 
 {% block javascript %}
 {% load static %}
-    <script src="{% static 'filtercv/custom.js' %}"></script>
-
-{% endblock javascript %} 
+<script src="{% static 'filtercv/custom.js' %}"></script>
+{% endblock javascript %}
