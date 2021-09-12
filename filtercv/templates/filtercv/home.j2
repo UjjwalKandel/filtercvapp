@@ -82,17 +82,15 @@
                 <input type="text" placeholder="Add tags here">
             </div>
             <div class="tags__placed">
-                <div class="tag">
-                    <span>Javascript</span>
-                    <i class="fas fa-times"></i>
-                </div>
+      
             </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="row justify-content-between action-btns">
             <input type="reset" is="button" class="btn btn-warning col-4 reset" value="Reset" id="reset_btn">
-            <button type="button" class="btn btn-primary col-4 submit">Submit</button>
+            {% csrf_token %} 
+            <button type="button" class="btn btn-primary col-4 submit" id="submit_btn">Submit</button>
         </div>
     </div>
  

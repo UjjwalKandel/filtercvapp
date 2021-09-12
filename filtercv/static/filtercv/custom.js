@@ -1,17 +1,23 @@
 'use strict';
-; (function (document, window, index) {
-
+(function (document, window, index) {
 
 	// Selected Elements
 	const input_files = document.getElementById('input_files');// Upload/add file
-	const reset_btn = document.getElementById('reset_btn');
 	const file_table = document.getElementById('file_table'); // A table body
 	const dropbox = document.getElementById('dropbox'); // For drag and drop
 	const filter_table_input = document.getElementById('filter_table');
 
+	const tags__placed = document.querySelector('.tags__placed');
+	const tag__input = document.querySelector('.tag__input')
+	const input = document.querySelector('.tag__input input');
+
+	const reset_btn = document.getElementById('reset_btn');
+	const submit_btn = document.getElementById('submit_btn');
+	const csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0].value
+
 	// Some variables to store data
 	let selected_files = [];
-	let tags = [];
+	let tags = ['python', 'javascript'];
 
 
 	// When file are added/removed.
@@ -107,22 +113,17 @@
 
 	const remove_row = (e) => {
 		const delete_index = e.srcElement.parentElement.parentElement.rowIndex;
-		console.log(delete_index);
 		selected_files.splice(delete_index - 1, 1);
 		update_table();
 	}
 
-}(document, window, 0));
 
 
-// Tag Part
+	// Tag Part
 
 // const tags = ['typescript', 'javascript'];
-let tags = [];
 
-const tags__placed = document.querySelector('.tags__placed');
-const tag__input = document.querySelector('.tag__input')
-const input = document.querySelector('.tag__input input');
+
 
 const createTag = entered_value => {
 	const div = document.createElement('div');
@@ -172,3 +173,33 @@ document.addEventListener('click', e => {
 		addTags();
 	}
 });
+
+submit_btn.onclick = (e) => {
+	e.preventDefault();
+
+	const formData = new FormData();
+
+	// formData.append('tags', tags );
+	tags.forEach(tag => {
+		formData.append('tags', tag)
+	})
+	selected_files.forEach(file => {
+		formData.append('files', file );
+	})
+	formData.append('csrfmiddlewaretoken', csrfmiddlewaretoken);	
+
+
+	const req = new Request('', {
+    body: formData,
+    method: 'POST',
+  });
+	fetch(req)
+		.then(res => res.json())
+		.then(data => {
+			console.log(data);
+		})
+		.catch(console.warn)
+	return false;
+}
+
+}(document, window, 0));

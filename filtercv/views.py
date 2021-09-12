@@ -8,14 +8,17 @@ from .find_certain_word import find_in_pdfBuffer
 # Create your views here.
 
 def home(request):
-
+    print(request.method)
     if request.method == "GET":
         context = {'title': 'Homepage'}
         return render(request, 'filtercv/home.j2', context)
 
     elif request.method == "POST":
+        
         result = {}
         words = request.POST['tags'].split(',')
+        words = request.POST.getlist('tags')
+        print(request.POST['tags'])
 
         for file in request.FILES.getlist('files'):
             local_result = set()
