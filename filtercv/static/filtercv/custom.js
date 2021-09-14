@@ -10,10 +10,10 @@
 	const tags__placed = document.querySelector('.tags__placed');
 	const tag__input = document.querySelector('.tag__input');
 	const input = document.querySelector('.tag__input input');
-	const reset_btn = document.getElementById('reset_btn');
-	const submit_btn = document.getElementById('submit_btn');
 	const input_tags_for_searching = document.getElementById('result_searching_tags')
 	const result_table = document.getElementById('result_table');
+	const reset_btn = document.getElementById('reset_btn');
+	const submit_btn = document.getElementById('submit_btn');
 	const previous_btn = document.getElementById('previous_btn');
 
 
@@ -78,7 +78,10 @@
 	// When reset button is pressed. 
 	reset_btn.addEventListener('click', () => {
 		input_files.value = '';
+		tags__placed.value = '';
+		tags = []
 		selected_files = [];
+		reset_tags();
 		update_file_table();
 	})
 
@@ -139,7 +142,7 @@
 
 	// First all tags and create tag for every items present in tags variable
 	const addTags = () => {
-		reset()
+		reset_tags()
 		tags.forEach(tag => {
 			const tag_div = createTag(tag);
 			tags__placed.prepend(tag_div);
@@ -147,14 +150,14 @@
 	}
 
 	// Remove preious tag element to create new element present in tags variable
-	const reset = () => {
+	const reset_tags = () => {
 		document.querySelectorAll('.tag').forEach(tag => {
 			tag.parentElement.removeChild(tag);
 		});
 	}
 
 	tag__input.addEventListener('keyup', e => {
-		reset();
+		reset_tags();
 		if (e.key === 'Enter') {
 			tags.push(input.value);
 			addTags();
