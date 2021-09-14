@@ -8,29 +8,39 @@ from .find_certain_word import find_in_pdfBuffer
 # Create your views here.
 
 def home(request):
-    print(request.method)
+    context = {'title': 'Homepage'}
     if request.method == "GET":
-        context = {'title': 'Homepage'}
         return render(request, 'filtercv/home.j2', context)
 
     elif request.method == "POST":
-        
         result = {}
-        words = request.POST['tags'].split(',')
-        words = request.POST.getlist('tags')
-        print(request.POST['tags'])
+        try:
+            words = request.POST.getlist('tags')
+            files = request.FILES.getlist('files')
+        except:
+            context['error'] = 'Invalid request. Check your input'
+            return JsonResponse(context)
 
-        for file in request.FILES.getlist('files'):
-            local_result = set()
-            for word in words:
-                if find_in_pdfBuffer(file, word):
-                    local_result.add(word)
+        if not files:
+            context['error'] = 'No file provided'
+        elif not words:
+            context['error'] = 'No tag provided'
+        else:
+            context['error'] = False
+            for file in files:
+                local_result = set()
+                for word in words:
+                    try:
+                        if find_in_pdfBuffer(file, word):
+                            local_result.add(word)
+                    except:
+                        context['error'] = 'Something went wrong when reading pdf files'
+                        return JsonResponse(context)
 
-            if len(local_result) != 0:
-                result[file.name] = set(local_result)
-                result[file.name] = list(result[file.name])
+                if len(local_result) != 0:
+                    result[file.name] = set(local_result)
+                    result[file.name] = list(result[file.name])
 
-        context = {'title': 'Homepage'}
         context['result'] = result
         context['words'] = words
         return JsonResponse(context)

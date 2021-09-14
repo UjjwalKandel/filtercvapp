@@ -1,8 +1,9 @@
 # imports
 import os
 # os.environ['TIKA_SERVER_JAR'] =  os.getcwd() + '/tika-server-1.24.jar'
-# print(os.environ['TIKA_SERVER_JAR'])
-from tika import parser  # pip install tika (Uses java runtime)
+from tika import parser
+import tika   # pip install tika (Uses java runtime)
+tika.initVM()
 from docx import Document
 # import PyPDF2
 import re

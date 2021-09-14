@@ -20,6 +20,10 @@ body::-webkit-scrollbar {
 	display: none;
 }
 
+.hide_section {
+	display: none;
+}
+
 
 .header {
     margin-top: 1rem;
