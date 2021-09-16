@@ -1,5 +1,10 @@
 'use strict';
-(function (document, window, index) {
+// (function (document, window, index) {
+
+	let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+	let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+		return new bootstrap.Tooltip(tooltipTriggerEl)
+	})
 
 	// Selected Elements
 	const sections = document.querySelectorAll('.section');//home section and result section
@@ -9,7 +14,7 @@
 	const filter_file_table_input = document.getElementById('filter_file_table_input');
 	const tags__placed = document.querySelector('.tags__placed');
 	const tag__input = document.querySelector('.tag__input');
-	const input = document.querySelector('.tag__input input');
+	const tag_input = document.querySelector('.tag__input input');
 	const input_tags_for_searching = document.getElementById('result_searching_tags')
 	const result_table = document.getElementById('result_table');
 	const reset_btn = document.getElementById('reset_btn');
@@ -77,9 +82,15 @@
 
 	// When reset button is pressed. 
 	reset_btn.addEventListener('click', () => {
+		// Remove all the input fields
 		input_files.value = '';
+		tag_input.value = '';
+		input_tags_for_searching.value = '';
+		// Remove all the added tags
 		tags__placed.value = '';
+		// Remove tags store in tags variable
 		tags = []
+		// Remove files store in seleted_files variable
 		selected_files = [];
 		reset_tags();
 		update_file_table();
@@ -159,9 +170,9 @@
 	tag__input.addEventListener('keyup', e => {
 		reset_tags();
 		if (e.key === 'Enter') {
-			tags.push(input.value);
+			tags.push(tag_input.value);
 			addTags();
-			input.value = '';
+			tag_input.value = '';
 		}
 	});
 
@@ -192,7 +203,6 @@
 		fetch(req)
 			.then(res => res.json())
 			.then(data => {
-				console.log(data)
 				update_result_table(data)
 				toggle_section();
 			})
@@ -209,7 +219,6 @@
 	const update_result_table = (data) => {
 		removeAllChildNodes(result_table);
 		Object.entries(data.result).forEach(report => {
-			console.log(report);
 
 			let tr = document.createElement("tr");
 
@@ -217,7 +226,34 @@
 			const file_tags = document.createElement('td');
 
 			file_name.innerHTML = `<i class="fas fa-file-pdf"> </i> ${report[0]}`
-			file_tags.textContent = report[1].join(', ')
+			// Object.keys(report[1])
+			// report[1] =  {
+			// 	"python": [ "Key Modules: Python and Django, Artificial Intelligence, Mathematics, Data Structure and .", "\\u25cf Strong knowledge of Python and Django framework, well versed in OOPS concepts." ], 
+			// 	"javascript": [ " \\u25cf Basic knowledge HTML, CSS, JavaScript ." ]
+			// }
+			// create a element here and append to file_tags
+			const tooltip_elements = document.createElement('span');
+			const tags_array = Object.keys(report[1])
+			tags_array.forEach((key, index) => {
+				const tooltip_element = document.createElement('span');
+				tooltip_elements.append(tooltip_element);
+				tooltip_element.textContent = key;
+				tooltip_element.setAttribute('data-toggle', 'tooltip');
+				tooltip_element.setAttribute('data-placement', 'bottom');
+				tooltip_element.setAttribute('data-html', 'true');    // This attribute is not working working right now
+				let tooltip_html = ''
+				report[1][key].forEach(t => {
+					// tooltip_html += `<p>${t}</p>`
+					tooltip_html += t
+				})
+				tooltip_element.setAttribute('title', tooltip_html);
+
+				if (index + 1 < tags_array.length) {
+					tooltip_element.insertAdjacentHTML('afterend', ', ');
+				}
+			})
+
+			file_tags.append(tooltip_elements) 
 
 
 			tr.appendChild(file_name);
@@ -279,4 +315,4 @@
 		toggle_section();
 	})
 
-}(document, window, 0));
+// }(document, window, 0));

@@ -1,9 +1,8 @@
 from django.db.models import constraints
 from filtercv.forms import UploadFilesAndTags
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.http import JsonResponse
-from .find_certain_word import find_in_pdfBuffer
+from .find_certain_word import find_in_pdf_buffer
 
 # Create your views here.
 
@@ -28,18 +27,14 @@ def home(request):
         else:
             context['error'] = False
             for file in files:
-                local_result = set()
-                for word in words:
-                    try:
-                        if find_in_pdfBuffer(file, word):
-                            local_result.add(word)
-                    except:
-                        context['error'] = 'Something went wrong when reading pdf files'
-                        return JsonResponse(context)
-
-                if len(local_result) != 0:
-                    result[file.name] = set(local_result)
-                    result[file.name] = list(result[file.name])
+                try:
+                    found_response = find_in_pdf_buffer(file, words)
+                    print(found_response)
+                    if len(found_response) != 0:
+                        result[file.name] = found_response
+                except:
+                    context['error'] = 'Something went wrong when reading pdf files'
+                    return JsonResponse(context)
 
         context['result'] = result
         context['words'] = words

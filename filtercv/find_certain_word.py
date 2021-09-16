@@ -53,15 +53,22 @@ def is_valid_breaker(lines: list, char_index: int, break_point: int, bracket_loc
     return True
 
 
-def find_word_in_strings(lines: list, word_to_find: str) -> list:
+def find_word_in_strings(lines: list[str], words_to_find: list[str]) -> dict[str, list[str]]:
     '''
-    Gives a list of line if word_to_find present in lines
+    Gives a list of line if words_to_find present in lines
     '''
 
     lines = ' '.join(lines).replace('\n', '. ')
     sentenses = []
-    if not len(lines) or word_to_find.lower() not in lines.lower():
-        return sentenses
+
+    any_word_present = False
+    for word_to_find in words_to_find:
+        if len(lines) and word_to_find.lower() in lines.lower():
+            any_word_present = True
+            break
+    
+    if not any_word_present:
+        return {}
 
     bracket_locations = []  # Helps if breaking point inside brackets
     break_point = 0         # Index of the starting of the current sentense
@@ -88,49 +95,57 @@ def find_word_in_strings(lines: list, word_to_find: str) -> list:
         # Looking for valid '.' and new_line to break sentenses
         if lines[i] == '.':
             if is_valid_breaker(lines, i, break_point, bracket_locations):
-                sentenses.append(lines[break_point: i+1].strip())
+                sentenses.append(lines[break_point: i+1].strip().lstrip('.'))
                 break_point = i+1
         i += 1
 
-    found_in_sentenses = []
-    for sentense in sentenses:
+    words_found_in_sentenses = {}
+    for word_to_find in words_to_find:
 
-        # if re.match(r'\b{}\b'.format(word_to_find.lower()), sentense.lower()):
-        if word_to_find.lower() in sentense.lower():
-            for word in sentense.lower().split():
-                if re.match(r'\b{}\b'.format(word_to_find.lower()), word):
-                    found_in_sentenses.append(sentense)
+        found_in_sentenses = set()
+        for sentense in sentenses:
+            if word_to_find.lower() in sentense.lower():
+                for word in sentense.lower().split():
+                    if re.match(r'\b{}\b'.format(word_to_find.lower()), word):
+                        found_in_sentenses.add(sentense.strip().lstrip('.'))
+        if found_in_sentenses:
+            words_found_in_sentenses[word_to_find] = list(found_in_sentenses)
 
-    return found_in_sentenses
+    return words_found_in_sentenses
+
+    # found_response = {
+    #     'python': ['adfaf python  fafd f', 'fadf python adf rewop']
+    #     'js': ['adfaf js fafd f', 'fadf adf js rewop']
+    # }
 
 
 def find_in_text(file: str, word_to_find: str) -> list:
     with open(file, 'r') as f:
         lines = f.readlines()
-    return find_word_in_strings(lines, word_to_find)
+    return find_word_in_strings(lines, [word_to_find])
 
 
 def find_in_docx(file: str, word_to_find: str) -> list:
     doc = Document(file)
     lines = [para.text for para in doc.paragraphs]
-    return find_word_in_strings(lines, word_to_find)
+    return find_word_in_strings(lines, [word_to_find])
 
 
-def find_in_pdf(file: str, word_to_find: str) -> list:
+# def find_in_pdf(file: str, word_to_find: str) -> list:
+#     '''
+#         argument: file location, word to find
+#         returns: list of strings including the found word
+
+#     '''
+#     raw = parser.from_file(file)
+#     return find_word_in_strings(raw['content'].split(" "), word_to_find)
+
+
+def find_in_pdf_buffer(file: str, words_to_find: list[str]) -> dict[str, list[str]]:
     '''
-        argument: file location, word to find
-        returns: list of strings including the found word
-
-    '''
-    raw = parser.from_file(file)
-    return find_word_in_strings(raw['content'].split(" "), word_to_find)
-
-
-def find_in_pdfBuffer(file: str, word_to_find: str) -> list:
-    '''
-        argument: file location, word to find
+        argument: file location, words to find
         returns: list of strings including the found word
 
     '''
     raw = parser.from_buffer(file)
-    return find_word_in_strings(raw['content'].split(" "), word_to_find)
+    return find_word_in_strings(raw['content'].split(" "), words_to_find)
