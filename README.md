@@ -4,7 +4,6 @@ Filter CV app implemented in Django
 ## Get started
 This django server helps serch tags in pdf files. Tags can be a word or a phrase. If the tag is presnet in a pdf file, it will just removed. It also shows in which line the tag is present in a line.
 It is currenty working for pdf file. This is no logic to handle any other type for now.
-This project is implemented in python and django as a web server.
 
 ### Getting Started
 Clone this repo and go to the repo directory
