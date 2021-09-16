@@ -16,6 +16,15 @@ body {
   font-size: 1.6rem;
 }
 
+body::-webkit-scrollbar {
+	display: none;
+}
+
+.hide_section {
+	display: none;
+}
+
+
 .header {
     margin-top: 1rem;
     width: 100%;
@@ -29,56 +38,210 @@ body {
     text-transform: uppercase;
 }
 
-input[type="text"]
-{
-    /* font-size:2.4rem; */
-    font-family: monospace;
+input[type=text]{
+	background-color: #c8dadf;
+	outline: none;
 }
 
-.upload {
+
+.upload_blue_box {
+  padding: 2.5rem;
   position: relative;
   min-height: 30rem;
   width: auto;
   background-color: #007296;
 }
 
-.upload-wrapper {
-  position: absolute;
+.body_wrapper, .tag_wrapper {
   min-height: 25rem;
-  width: 80%;
-  left: 50%;
-  top: 50%; 
-  transform: translate(-50%, -50%);
+  width: auto;
   background-color: #D6F7FE;
 }
 
-.upload-wrapper-text--secondary {
-  margin: 4rem;
-  margin-left: 10rem;
+.heading_text {
   font-size: 2rem;
 }
 
-.upload-wrapper-text--primary {
+/* .upload_heading-text--secondary {
+} */
+
+.upload_heading-text--primary {
   display: block;
   font-size: 3rem;
   font-weight: bolder;
   letter-spacing: .2rem;
 }
 
-.input-bar {
-  margin-top: 4rem;
-  display: table;
-  width: 50%;
+
+/* Drag and drop upload part */
+.box {
+	font-size: 2rem; 
+	background-color: #c8dadf;
+	position: relative;
+	padding: 100px 20px;
+	overflow: hidden;
 }
 
-.input-bar-item {
-  display: table-cell;
+.box.has-advanced-upload {
+	outline: 2px dashed #92b0b3;
+	outline-offset: -1rem;
+
+	-webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+	transition: outline-offset .15s ease-in-out, background-color .15s linear;
 }
 
-.input-bar-item > button {
-  margin-left: 5px;
+.box.is-dragover {
+	outline-offset: -2rem;
+	outline-color: #c8dadf;
+	background-color: #fff;
 }
 
-.inactive {
-  display: none;
+.box__icon {
+	font-size: 10rem;
 }
+
+.box__dragndrop, .box__icon {
+	display: none;
+}
+
+.box.has-advanced-upload .box__dragndrop {
+	display: inline;
+}
+
+.box.has-advanced-upload .box__icon {
+	width: 100%;
+	height: 80px;
+	fill: #92b0b3;
+	display: block;
+	margin-bottom: 40px;
+}
+
+.box__input{
+	text-align: center;
+}
+
+@-webkit-keyframes appear-from-inside {
+	from	{ -webkit-transform: translateY( -50% ) scale( 0 ); }
+	75%		{ -webkit-transform: translateY( -50% ) scale( 1.1 ); }
+	to		{ -webkit-transform: translateY( -50% ) scale( 1 ); }
+}
+
+@keyframes appear-from-inside {
+	from	{ transform: translateY( -50% ) scale( 0 ); }
+	75%		{ transform: translateY( -50% ) scale( 1.1 ); }
+	to		{ transform: translateY( -50% ) scale( 1 ); }
+}
+
+.box__file {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.box__file + label {
+	max-width: 80%;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	cursor: pointer;
+	display: inline-block;
+	overflow: hidden;
+}
+
+.box__file + label:hover strong,
+.box__file:focus + label strong,
+.box__file.has-focus + label strong {
+	color: #39bfd3;
+}
+
+.box__file:focus + label,
+.box__file.has-focus + label {
+	outline: 1px dotted #000;
+	outline: -webkit-focus-ring-color auto 5px;
+}
+
+.input_files {
+	outline: none;
+}
+
+.file_table {
+	margin-top: 3rem;
+}
+
+.file_table_filter{
+	position: relative;
+}
+
+.file_table_filter i{
+	position: absolute;
+	left: 1.5rem;
+	top: 1.9rem;
+	color: gray;
+}
+
+.file_table_filter_input {
+  background-position: 1rem 1rem;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 1.6rem;
+  padding: 1.2rem 2rem 1.2rem 4rem;
+  border: 1px solid #ddd;
+  margin-bottom: 1.2rem;
+}
+
+
+.action-btns {
+	margin: 5rem;
+	margin-bottom: 10rem;
+	
+}
+
+
+.action-btns .submit, .action-btns .reset{
+	font-size: 2rem;
+}
+
+/* Tag part */
+.tag_wrapper {
+	margin-top: 3rem;
+}
+
+.tag__input {
+	border: .2rem solid #ccc;
+	padding: 1rem;
+	border-radius: .5rem;
+	display: flex;
+}
+
+.tags__placed {
+	margin-top: 2rem;
+	display: flex;
+}
+
+.tags__placed .tag {
+	padding: .5rem;
+	border: .1rem solid #ccc;
+	margin: .5rem;
+	align-items: center;
+	border-radius: .3rem;
+	background: #f2f2f2;
+	cursor: default;
+}
+
+.tag i {
+	font-size: 1.6rem;
+	margin-left: .5rem;
+}
+
+.tag__input input {
+	flex: 1;
+	font-size: 1.6rem;
+	padding: .5rem;
+	outline: none;
+	border: 0;
+}
+
+
+/* custom tooltip css */
