@@ -1,5 +1,5 @@
 'use strict';
-// (function (document, window, index) {
+(function (document, window, index) {
 
 	let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 	let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -315,4 +315,4 @@
 		toggle_section();
 	})
 
-// }(document, window, 0));
+ }(document, window, 0));
